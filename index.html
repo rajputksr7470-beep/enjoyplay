@@ -1,141 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; user-select: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body { background: #e8e3fc; display: flex; justify-content: center; min-height: 100vh; }
-    .app { width: 100%; max-width: 420px; height: 100vh; background: #f5f3ff; display: flex; flex-direction: column; position: relative; color: #333; overflow: hidden; }
-    .top { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; background: #fff; border-bottom: 1px solid #eee; }
-    .user { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 14px; }
-    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #9b51e0; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .coins { color: #f2994a; background: #fff8e7; border: 1px solid #ffe0b2; padding: 4px 10px; border-radius: 15px; font-weight: bold; font-size: 13px; cursor: pointer; }
-    .nav-top { display: flex; justify-content: space-around; padding: 12px 10px; background: #fff; margin-bottom: 8px; }
-    .q-btn { text-align: center; font-size: 11px; font-weight: bold; color: #555; cursor: pointer; }
-    .q-icon { width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-    .content { flex: 1; overflow-y: auto; padding: 12px; }
-    .section-title { font-size: 15px; font-weight: 800; margin: 10px 0 8px; color: #222; }
-    .grid { display: flex; flex-direction: column; gap: 10px; }
-    .banner-card { border-radius: 16px; padding: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .card-spy { background: linear-gradient(135deg, #4b7bec, #3867d6); color: #fff; }
-    .card-cafe { background: linear-gradient(135deg, #f7b731, #fa8231); color: #fff; }
-    .card-wolf { background: linear-gradient(135deg, #a55eea, #8854d0); color: #fff; }
-    .card-draw { background: linear-gradient(135deg, #26de81, #20bf6b); color: #fff; }
-    .card-mic { background: linear-gradient(135deg, #fd79a8, #e84393); color: #fff; }
-    .card-title { font-size: 16px; font-weight: 800; margin-bottom: 2px; }
-    .card-sub { font-size: 10px; opacity: 0.9; }
-    .card-btn { background: #fff; color: #333; border: none; padding: 5px 14px; border-radius: 18px; font-weight: bold; font-size: 12px; }
-    .room-card { background: #fff; border-radius: 14px; padding: 12px 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #ff2a85; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .join-btn { background: linear-gradient(45deg, #ff2a85, #a020f0); border: none; color: #fff; padding: 6px 14px; border-radius: 12px; font-weight: bold; font-size: 12px; cursor: pointer; }
-    .overlay { display: none; position: absolute; top:0; left:0; right:0; bottom:0; background: #1a0c36; color: #fff; z-index: 99; flex-direction: column; padding: 18px; }
-    .btn-exit { background: #ff2a85; border: none; color: white; padding: 6px 16px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-    .seats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 15px 0; }
-    .seat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .seat-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 2px dashed #ff2a85; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    .seat-avatar.occupied { border: 2px solid #00ff88; background: #502288; }
-    .nav-bottom { height: 50px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; font-size: 11px; font-weight: bold; color: #777; }
-    .nav-item { cursor: pointer; text-align: center; }
-    .nav-item.active { color: #ff2a85; }
+    .app { width: 100%; max-width: 420px; background: #f5f3ff; min-height: 100vh; display: flex; flex-direction: column; }
+    .top { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+    .user { display: flex; align-items: center; gap: 10px; font-weight: bold; }
+    .avatar { width: 36px; height: 36px; background: #8b5cf6; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .coins { color: #d97706; background: #fef3c7; padding: 4px 10px; border-radius: 15px; font-weight: bold; font-size: 14px; }
+    
+    .nav-top { display: flex; justify-content: space-around; padding: 15px; background: #fff; border-bottom: 1px solid #eee; }
+    .q-btn { text-align: center; font-size: 12px; font-weight: bold; color: #4b5563; }
+    .q-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-size: 20px; }
+    
+    .content { flex: 1; padding: 15px; overflow-y: auto; }
+    .section-title { font-size: 16px; font-weight: bold; margin: 15px 0 10px; color: #1f2937; }
+    
+    .card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .g-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+    .g-orange { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+    .g-purple { background: linear-gradient(135deg, #a855f7, #9333ea); color: white; }
+    .g-green { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+    .g-pink { background: linear-gradient(135deg, #ec4899, #db2777); color: white; }
+    
+    .btn-play { background: white; color: #333; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+    .btn-pink { background: #ec4899; color: white; }
+    
+    .nav-bottom { display: flex; justify-content: space-around; padding: 12px; background: #fff; border-top: 1px solid #eee; }
+    .nav-item { text-align: center; font-size: 12px; color: #6b7280; font-weight: bold; }
+    .nav-active { color: #ec4899; }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="top">
-      <div class="user">
-        <div class="avatar">K</div>
-        <span>KS Rajput</span>
-      </div>
-      <div class="coins" onclick="openPopup('Coins Wallet', 'Current Balance: 27,905 Coins\nRecharge options coming soon!')">🪙 27,905 +</div>
+
+<div class="app">
+  <div class="top">
+    <div class="user">
+      <div class="avatar">K</div>
+      <span>KS Rajput</span>
     </div>
-    <div class="nav-top">
-      <div class="q-btn" onclick="openPopup('🏆 Global Ranking', '1. Player Alpha - 120,400 pts\n2. KS Rajput - 27,905 pts\n3. Riya Queen - 25,100 pts')">
-        <div class="q-icon" style="background:#fcedf7;">🏆</div>Ranking
+    <div class="coins">🪙 27,905 +</div>
+  </div>
+
+  <div class="nav-top">
+    <div class="q-btn"><div class="q-icon" style="background:#fef3c7;">🏆</div>Ranking</div>
+    <div class="q-btn"><div class="q-icon" style="background:#e0f2fe;">📋</div>Tasks</div>
+    <div class="q-btn"><div class="q-icon" style="background:#dcfce7;">👥</div>Friends</div>
+    <div class="q-btn"><div class="q-icon" style="background:#fef3c7;">⭐</div>Club</div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">Games 🎮</div>
+
+    <div class="card g-blue">
+      <div>
+        <h3>Who's the Spy 🕵️‍♂️</h3>
+        <p style="font-size:12px; opacity:0.8;">Super popular casual games</p>
       </div>
-      <div class="q-btn" onclick="openPopup('📋 Daily Tasks', '✓ Daily Login (+100 Coins)\n• Play 3 Games (+500 Coins)')">
-        <div class="q-icon" style="background:#e3f2fd;">📋</div>Tasks
-      </div>
-      <div class="q-btn" onclick="openPopup('👥 Online Friends', '• Riya (In Voice Room)\n• Rahul (Playing Ludo)')">
-        <div class="q-icon" style="background:#e8f5e9;">👥</div>Friends
-      </div>
-      <div class="q-btn" onclick="openPopup('⭐ SuperClub VIP', 'VIP Level 1 Active!')">
-        <div class="q-icon" style="background:#fff3e0;">⭐</div>Club
-      </div>
+      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
     </div>
-    <div class="content">
-      <div class="section-title">Games 🎮</div>
-      <div class="grid">
-        <div class="banner-card card-spy" onclick="show('spy')">
-          <div><div class="card-title">Who's the Spy 🕵️</div><div class="card-sub">Super popular casual games</div></div>
-          <button class="card-btn" style="color:#3867d6;">Play</button>
-        </div>
-        <div class="banner-card card-cafe" onclick="show('cafe')">
-          <div><div class="card-title">Trickster's Cafe 🐊</div><div class="card-sub">Psychological vs Qismat</div></div>
-          <button class="card-btn" style="color:#fa8231;">Play</button>
-        </div>
-        <div class="banner-card card-wolf" onclick="show('wolf')">
-          <div><div class="card-title">Space Werewolf 🐺</div><div class="card-sub">Killers VS Civilians</div></div>
-          <button class="card-btn" style="color:#8854d0;">Play</button>
-        </div>
-        <div class="banner-card card-draw" onclick="show('draw')">
-          <div><div class="card-title">Draw & Guess 🎨</div><div class="card-sub">Imagination battle</div></div>
-          <button class="card-btn" style="color:#20bf6b;">Play</button>
-        </div>
-        <div class="banner-card card-mic" onclick="show('mic')">
-          <div><div class="card-title">Mic Grab 🎤</div><div class="card-sub">Hot songs non-stop</div></div>
-          <button class="card-btn" style="color:#e84393;">Play</button>
-        </div>
+
+    <div class="card g-orange">
+      <div>
+        <h3>Trickster's Cafe 🐊</h3>
+        <p style="font-size:12px; opacity:0.8;">Psychological vs Qismat</p>
       </div>
-      <div class="section-title" style="margin-top:20px;">🎙️ Active Voice Rooms</div>
-      <div class="room-card">
-        <div><div style="font-weight:bold; font-size:14px;">Hindi Songs & Chill 🎵</div><div style="font-size:11px; color:#888;">🎙️ 5/8 On Mic</div></div>
-        <button class="join-btn" onclick="openVoiceRoom('Hindi Songs & Chill')">Join Mic</button>
-      </div>
+      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
     </div>
-    <div id="voiceRoom" class="overlay">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 id="vRoomTitle">Voice Party</h3>
-        <button class="btn-exit" onclick="hide('voiceRoom')">Exit Room</button>
+
+    <div class="card g-purple">
+      <div>
+        <h3>Space Werewolf 🐺</h3>
+        <p style="font-size:12px; opacity:0.8;">Killers VS Civilians</p>
       </div>
-      <div class="seats-grid">
-        <div class="seat"><div class="seat-avatar occupied">👑</div><span style="font-size:10px;">KS Rajput</span></div>
-        <div class="seat"><div class="seat-avatar occupied">👧</div><span style="font-size:10px;">Riya</span></div>
-        <div class="seat" onclick="takeSeat(this)"><div class="seat-avatar">+</div><span style="font-size:10px;">Seat 3</span></div>
-        <div class="seat" onclick="takeSeat(this)"><div class="seat-avatar">+</div><span style="font-size:10px;">Seat 4</span></div>
-      </div>
-      <div style="background:rgba(0,0,0,0.3); flex:1; border-radius:12px; padding:10px; margin:10px 0; overflow-y:auto; font-size:12px;" id="chatBox">
-        <div><b style="color:#ff2a85;">System:</b> Welcome to Voice Party!</div>
-      </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn-exit" style="flex:1; background:#3867d6;" onclick="toggleMic(this)">🎙️ Mic ON</button>
-        <button class="btn-exit" style="flex:1;" onclick="sendGift()">🎁 Send Gift</button>
-      </div>
+      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
     </div>
-    <div id="customPopup" class="overlay" style="justify-content:center; align-items:center; text-align:center; background:rgba(26,12,54,0.95);">
-      <div style="background:#261447; padding:25px; border-radius:20px; width:85%; border:1px solid rgba(255,255,255,0.1);">
-        <h3 id="popupTitle" style="color:#ff2a85; margin-bottom:12px;">Title</h3>
-        <p id="popupDesc" style="font-size:13px; line-height:1.6; white-space:pre-line; margin-bottom:20px; color:#ddd;"></p>
-        <button class="btn-exit" style="width:100%; padding:10px;" onclick="hide('customPopup')">Close</button>
+
+    <div class="card g-green">
+      <div>
+        <h3>Draw & Guess 🎨</h3>
+        <p style="font-size:12px; opacity:0.8;">Imagination battle</p>
       </div>
+      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
     </div>
-    <div id="spy" class="overlay"><div style="display:flex; justify-content:space-between;"><h3>🕵️ Who's the Spy</h3><button class="btn-exit" onclick="hide('spy')">Exit</button></div><div style="background:rgba(255,255,255,0.1); padding:20px; border-radius:12px; text-align:center; margin-top:20px;">Your Word: <b style="color:#ff2a85;">Nature Photographer</b></div></div>
-    <div id="cafe" class="overlay"><div style="display:flex; justify-content:space-between;"><h3>🐊 Trickster's Cafe</h3><button class="btn-exit" onclick="hide('cafe')">Exit</button></div><div style="text-align:center; margin-top:40px;">🃏 Card Battle Arena</div></div>
-    <div id="wolf" class="overlay"><div style="display:flex; justify-content:space-between;"><h3>🐺 Space Werewolf</h3><button class="btn-exit" onclick="hide('wolf')">Exit</button></div><div style="background:#ff2a85; padding:15px; border-radius:12px; text-align:center; margin-top:20px;">Your Character: KILLER 🔪</div></div>
-    <div id="draw" class="overlay"><div style="display:flex; justify-content:space-between;"><h3>🎨 Draw & Guess</h3><button class="btn-exit" onclick="hide('draw')">Exit</button></div><div style="background:#fff; flex:1; border-radius:12px; color:#333; display:flex; align-items:center; justify-content:center; margin-top:15px;">Drawing Board ✏️</div></div>
-    <div id="mic" class="overlay"><div style="display:flex; justify-content:space-between;"><h3>🎤 Mic Grab</h3><button class="btn-exit" onclick="hide('mic')">Exit</button></div><div style="text-align:center; margin-top:50px;"><button class="btn-exit" style="padding:15px 30px;" onclick="alert('You grabbed the mic!')">GRAB MIC 🎙️</button></div></div>
-    <div class="nav-bottom">
-      <div class="nav-item active">🎮 Games</div>
-      <div class="nav-item" onclick="alert('Voice Rooms Active!')">🎙️ Party</div>
-      <div class="nav-item" onclick="openPopup('👤 Profile', 'KS Rajput\nID: 8849201')">👤 Profile</div>
+
+    <div class="card g-pink">
+      <div>
+        <h3>Mic Grab 🎤</h3>
+        <p style="font-size:12px; opacity:0.8;">Hot songs non-stop</p>
+      </div>
+      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
+    </div>
+
+    <div class="section-title">🎙️ Active Voice Rooms</div>
+    <div class="card" style="border: 2px solid #f472b6;">
+      <div>
+        <h3>Hindi Songs & Chill 🎵</h3>
+        <p style="font-size:12px; color:#6b7280;">🎙️ 5/8 On Mic</p>
+      </div>
+      <button class="btn-play btn-pink" onclick="alert('Connecting to Voice Room...')">Join Mic</button>
     </div>
   </div>
-  <script>
-    function show(id) { document.getElementById(id).style.display = 'flex'; }
-    function hide(id) { document.getElementById(id).style.display = 'none'; }
-    function openPopup(title, desc) { document.getElementById('popupTitle').innerText = title; document.getElementById('popupDesc').innerText = desc; show('customPopup'); }
-    function openVoiceRoom(name) { document.getElementById('vRoomTitle').innerText = name; show('voiceRoom'); }
-    function takeSeat(elem) { elem.innerHTML = '<div class="seat-avatar occupied">😎</div><span style="font-size:10px;">You</span>'; }
-    function toggleMic(btn) { if(btn.innerText.includes('ON')) { btn.innerText = '🔇 Mic OFF'; btn.style.background = '#555'; } else { btn.innerText = '🎙️ Mic ON'; btn.style.background = '#3867d6'; } }
-    function sendGift() { let box = document.getElementById('chatBox'); box.innerHTML += '<div><b style="color:#ff2a85;">KS Rajput:</b> Sent a Rocket 🚀 Gift!</div>'; box.scrollTop = box.scrollHeight; }
-  </script>
+
+  <div class="nav-bottom">
+    <div class="nav-item nav-active">🎮 Games</div>
+    <div class="nav-item">🎙️ Party</div>
+    <div class="nav-item">👤 Profile</div>
+  </div>
+</div>
+
 </body>
 </html>
