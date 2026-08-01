@@ -10,7 +10,7 @@
     .app { width: 100%; max-width: 420px; background: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
     
     .top-bar { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #16162a; border-bottom: 1px solid #2a2a4a; }
-    .user-info { display: flex; align-items: center; gap: 10px; }
+    .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .avatar { width: 40px; height: 40px; background: linear-gradient(45deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #fff; }
     .coins-btn { background: #2a2a4a; border: 1px solid #f59e0b; color: #f59e0b; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; cursor: pointer; }
     
@@ -26,19 +26,23 @@
     .g-sub { font-size: 12px; color: #9ca3af; margin-top: 2px; }
     .btn-play { background: linear-gradient(45deg, #ec4899, #8b5cf6); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
     
-    /* Full Screen Game Canvas Modal */
-    .game-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0f0c20; z-index: 200; flex-direction: column; padding: 15px; }
-    .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    /* Common Modal Screens */
+    .modal-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0f0c20; z-index: 200; flex-direction: column; padding: 20px; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #2a2a4a; padding-bottom: 10px; }
+    .close-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+    
+    /* Canvas */
     #drawCanvas { background: #ffffff; border-radius: 12px; width: 100%; height: 350px; touch-action: none; }
     .color-picker { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
     .c-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; }
 
-    /* Voice Room Modal */
-    .voice-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0f0c20; z-index: 100; flex-direction: column; padding: 20px; }
-    .room-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    /* Voice Room */
     .mic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
     .mic-slot { background: #1d1b3a; border-radius: 50%; width: 65px; height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 2px dashed #4c1d95; font-size: 20px; }
     .mic-active { border: 2px solid #ec4899; background: #2e1065; }
+
+    /* Features UI */
+    .list-item { background: #1d1b3a; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
     .bottom-nav { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px; background: #16162a; border-top: 1px solid #2a2a4a; }
     .b-item { text-align: center; font-size: 12px; color: #6b7280; font-weight: bold; cursor: pointer; }
@@ -48,22 +52,24 @@
 <body>
 
 <div class="app">
+  <!-- Top Bar -->
   <div class="top-bar">
-    <div class="user-info">
+    <div class="user-info" onclick="openModal('profileModal')">
       <div class="avatar">KS</div>
       <div>
         <div style="font-weight: bold; font-size: 14px;">KS Rajput</div>
-        <div style="font-size: 10px; color: #8b5cf6;">ID: 67108876</div>
+        <div style="font-size: 10px; color: #8b5cf6;">ID: 67108876 ✏️</div>
       </div>
     </div>
-    <button class="coins-btn" onclick="addCoins()">🪙 <span id="coinCount">27,905</span> +</button>
+    <button class="coins-btn" onclick="openModal('topupModal')">🪙 <span id="coinCount">42,905</span> +</button>
   </div>
 
+  <!-- Quick Nav -->
   <div class="quick-nav">
-    <div class="nav-btn"><div class="icon-box">🏆</div>Ranking</div>
-    <div class="nav-btn"><div class="icon-box">📋</div>Tasks</div>
-    <div class="nav-btn"><div class="icon-box">👥</div>Friends</div>
-    <div class="nav-btn"><div class="icon-box">👑</div>VIP</div>
+    <div class="nav-btn" onclick="openModal('rankingModal')"><div class="icon-box">🏆</div>Ranking</div>
+    <div class="nav-btn" onclick="openModal('tasksModal')"><div class="icon-box">📋</div>Tasks</div>
+    <div class="nav-btn" onclick="openModal('friendsModal')"><div class="icon-box">👥</div>Friends</div>
+    <div class="nav-btn" onclick="openModal('vipModal')"><div class="icon-box">👑</div>VIP</div>
   </div>
 
   <div class="content">
@@ -91,19 +97,88 @@
         <div class="g-title">Hindi Chill & Songs 🎵</div>
         <div class="g-sub">🎙️ 5 Seats Occupied</div>
       </div>
-      <button class="btn-play" style="background: #ec4899;" onclick="toggleVoiceRoom(true)">Join Room</button>
+      <button class="btn-play" style="background: #ec4899;" onclick="openModal('voiceRoomModal')">Join Room</button>
     </div>
   </div>
 
-  <!-- Interactive Draw Game Screen -->
-  <div class="game-screen" id="gameScreen">
-    <div class="game-header">
-      <h3>🎨 Draw & Guess (Word: APPLE)</h3>
-      <button style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 12px; font-weight: bold;" onclick="closeGameScreen()">Exit</button>
+  <!-- Profile Modal -->
+  <div class="modal-screen" id="profileModal">
+    <div class="modal-header">
+      <h3>👤 User Profile</h3>
+      <button class="close-btn" onclick="closeModal('profileModal')">Close</button>
     </div>
-    
-    <canvas id="drawCanvas"></canvas>
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div class="avatar" style="width:70px; height:70px; margin: 0 auto; font-size: 24px;">KS</div>
+      <h2 style="margin-top: 10px;">KS Rajput</h2>
+      <p style="color: #8b5cf6; font-size: 13px;">ID: 67108876</p>
+    </div>
+    <div class="list-item"><span>Level</span> <strong>Lv. 15 🔥</strong></div>
+    <div class="list-item"><span>Coins Balance</span> <strong style="color:#f59e0b;">🪙 42,905</strong></div>
+    <div class="list-item"><span>Privacy: Hide Location</span> <button style="padding: 4px 10px;" onclick="alert('Privacy Updated!')">ON</button></div>
+  </div>
 
+  <!-- TopUp Modal -->
+  <div class="modal-screen" id="topupModal">
+    <div class="modal-header">
+      <h3>🪙 Coin Store (Top-Up)</h3>
+      <button class="close-btn" onclick="closeModal('topupModal')">Close</button>
+    </div>
+    <div class="list-item"><span>🪙 1,000 Coins</span> <button class="btn-play" onclick="addCoins(1000)">₹10</button></div>
+    <div class="list-item"><span>🪙 5,500 Coins</span> <button class="btn-play" onclick="addCoins(5500)">₹50</button></div>
+    <div class="list-item"><span>🪙 12,000 Coins</span> <button class="btn-play" onclick="addCoins(12000)">₹100</button></div>
+  </div>
+
+  <!-- Ranking Modal -->
+  <div class="modal-screen" id="rankingModal">
+    <div class="modal-header">
+      <h3>🏆 Global Leaderboard</h3>
+      <button class="close-btn" onclick="closeModal('rankingModal')">Close</button>
+    </div>
+    <div class="list-item"><span>1. 🥇 Gamer_King</span> <strong>98,000 pts</strong></div>
+    <div class="list-item"><span>2. 🥈 KS Rajput</span> <strong>42,905 pts</strong></div>
+    <div class="list-item"><span>3. 🥉 Shadow_Player</span> <strong>35,400 pts</strong></div>
+  </div>
+
+  <!-- Tasks Modal -->
+  <div class="modal-screen" id="tasksModal">
+    <div class="modal-header">
+      <h3>📋 Daily Tasks</h3>
+      <button class="close-btn" onclick="closeModal('tasksModal')">Close</button>
+    </div>
+    <div class="list-item"><span>Daily Check-in</span> <button class="btn-play" onclick="addCoins(500)">Claim 500 🪙</button></div>
+    <div class="list-item"><span>Play 1 Game</span> <button class="btn-play" onclick="addCoins(300)">Claim 300 🪙</button></div>
+  </div>
+
+  <!-- Friends Modal -->
+  <div class="modal-screen" id="friendsModal">
+    <div class="modal-header">
+      <h3>👥 Friends List</h3>
+      <button class="close-btn" onclick="closeModal('friendsModal')">Close</button>
+    </div>
+    <div class="list-item"><span>🟢 Rohit (Online)</span> <button style="padding:4px 10px;">Chat</button></div>
+    <div class="list-item"><span>🔴 Alex (Offline)</span> <button style="padding:4px 10px;">Profile</button></div>
+  </div>
+
+  <!-- VIP Modal -->
+  <div class="modal-screen" id="vipModal">
+    <div class="modal-header">
+      <h3>👑 VIP Center</h3>
+      <button class="close-btn" onclick="closeModal('vipModal')">Close</button>
+    </div>
+    <div style="text-align:center; padding: 20px 0;">
+      <h2 style="color: #f59e0b;">VIP Privilege Pass</h2>
+      <p style="margin-top: 10px; color:#9ca3af;">Get Golden Name, Exclusive Avatar Frame & 2x Rewards!</p>
+      <button class="btn-play" style="margin-top: 20px;" onclick="alert('VIP Pass Activated!')">Activate VIP</button>
+    </div>
+  </div>
+
+  <!-- Game Canvas Screen -->
+  <div class="modal-screen" id="gameScreen">
+    <div class="modal-header">
+      <h3>🎨 Draw & Guess (Word: APPLE)</h3>
+      <button class="close-btn" onclick="closeModal('gameScreen')">Exit</button>
+    </div>
+    <canvas id="drawCanvas"></canvas>
     <div class="color-picker">
       <div class="c-btn" style="background: #000;" onclick="changeColor('#000')"></div>
       <div class="c-btn" style="background: #ef4444;" onclick="changeColor('#ef4444')"></div>
@@ -114,10 +189,10 @@
   </div>
 
   <!-- Voice Room Screen -->
-  <div class="voice-screen" id="voiceRoom">
-    <div class="room-header">
+  <div class="modal-screen" id="voiceRoomModal">
+    <div class="modal-header">
       <h3>🎵 Hindi Chill Party</h3>
-      <button style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 12px; font-weight: bold;" onclick="toggleVoiceRoom(false)">Leave</button>
+      <button class="close-btn" onclick="closeModal('voiceRoomModal')">Leave</button>
     </div>
     <div class="mic-grid">
       <div class="mic-slot mic-active">👑<span style="font-size: 10px;">Host</span></div>
@@ -134,26 +209,32 @@
     </div>
   </div>
 
+  <!-- Bottom Nav -->
   <div class="bottom-nav">
     <div class="b-item b-active">🎮 Games</div>
-    <div class="b-item">🎙️ Party</div>
-    <div class="b-item">💬 Chat</div>
-    <div class="b-item">👤 Profile</div>
+    <div class="b-item" onclick="openModal('voiceRoomModal')">🎙️ Party</div>
+    <div class="b-item" onclick="openModal('friendsModal')">💬 Chat</div>
+    <div class="b-item" onclick="openModal('profileModal')">👤 Profile</div>
   </div>
 </div>
 
 <script>
-  let coins = 27905;
+  let coins = 42905;
   let isMicOn = true;
   let canvas, ctx, drawing = false, color = "#000000";
 
-  function addCoins() {
-    coins += 1000;
-    document.getElementById('coinCount').innerText = coins.toLocaleString();
+  function openModal(id) {
+    document.getElementById(id).style.display = 'flex';
   }
 
-  function toggleVoiceRoom(show) {
-    document.getElementById('voiceRoom').style.display = show ? 'flex' : 'none';
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  function addCoins(amount) {
+    coins += amount;
+    document.getElementById('coinCount').innerText = coins.toLocaleString();
+    alert('🎉 ' + amount + ' Coins Added Successfully!');
   }
 
   function toggleMic() {
@@ -163,14 +244,9 @@
     btn.innerText = isMicOn ? '🎙️ Mic On' : '🎙️ Mic Muted';
   }
 
-  /* Game Canvas Logic */
   function openGameScreen() {
-    document.getElementById('gameScreen').style.display = 'flex';
+    openModal('gameScreen');
     setTimeout(initCanvas, 100);
-  }
-
-  function closeGameScreen() {
-    document.getElementById('gameScreen').style.display = 'none';
   }
 
   function initCanvas() {
