@@ -1,401 +1,127 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>WePlay Clone - KS Rajput</title>
-  <style>
-    /* Prevent text selection everywhere like a real native app */
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      -webkit-user-select: none; /* Safari / Android WebView */
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none; 
-      -webkit-touch-callout: none; /* Disable long-press popup */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EnjoyPlay - WePlay Clone</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #0F0F1A; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 12px; }
+        
+        /* Top Profile Header */
+        .header { display: flex; align-items: center; justify-content: space-between; background: #181828; padding: 10px 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 16px; }
+        .user-profile { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 44px; height: 44px; background: linear-gradient(135deg, #8B5CF6, #EC4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; border: 2px solid #A78BFA; }
+        .user-info h3 { font-size: 15px; font-weight: 700; color: #FFF; }
+        .user-info p { font-size: 11px; color: #A78BFA; font-weight: 600; }
+        .vip-badge { background: linear-gradient(90deg, #F59E0B, #10B981); color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 20px; text-transform: uppercase; }
 
-    /* Allow typing only in chat input */
-    input {
-      -webkit-user-select: text;
-      user-select: text;
-    }
+        /* Section Titles */
+        .section-title { font-size: 16px; font-weight: 700; color: #E2E8F0; margin: 16px 0 10px 4px; display: flex; align-items: center; gap: 8px; }
 
-    body { background: #12121e; color: #fff; display: flex; justify-content: center; min-height: 100vh; }
-    .app { width: 100%; max-width: 420px; background: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
-    
-    .top-bar { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #16162a; border-bottom: 1px solid #2a2a4a; }
-    .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .avatar { width: 40px; height: 40px; background: linear-gradient(45deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #fff; }
-    .coins-btn { background: #2a2a4a; border: 1px solid #f59e0b; color: #f59e0b; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; cursor: pointer; }
-    
-    .quick-nav { display: flex; justify-content: space-around; padding: 15px; background: #16162a; margin-bottom: 10px; }
-    .nav-btn { text-align: center; font-size: 12px; color: #a5b4fc; cursor: pointer; }
-    .icon-box { width: 45px; height: 45px; background: #252542; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 22px; }
-    
-    .content { flex: 1; padding: 15px; overflow-y: auto; padding-bottom: 70px; }
-    .section-title { font-size: 16px; font-weight: bold; margin: 15px 0 10px; color: #e0e7ff; }
-    
-    .card { background: #22223b; border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #32325a; }
-    .g-title { font-size: 16px; font-weight: bold; }
-    .g-sub { font-size: 12px; color: #9ca3af; margin-top: 2px; }
-    .btn-play { background: linear-gradient(45deg, #ec4899, #8b5cf6); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
-    
-    /* Common Modal Screens */
-    .modal-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0f0c20; z-index: 200; flex-direction: column; padding: 20px; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #2a2a4a; padding-bottom: 10px; }
-    .close-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-    
-    /* Chat Box Style */
-    .chat-messages { flex: 1; overflow-y: auto; background: #16162a; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; max-height: 400px; }
-    .msg { padding: 8px 14px; border-radius: 15px; max-width: 80%; font-size: 14px; }
-    .msg-in { background: #2a2a4a; align-self: flex-start; color: #fff; }
-    .msg-out { background: #8b5cf6; align-self: flex-end; color: #fff; }
-    .chat-input-box { display: flex; gap: 10px; }
-    .chat-input { flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid #2a2a4a; background: #16162a; color: white; outline: none; }
+        /* Game Cards */
+        .card { background: #1E1E30; border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.03); }
+        .card-info h4 { font-size: 15px; font-weight: 700; color: #F3F4F6; margin-bottom: 3px; }
+        .card-info p { font-size: 11px; color: #9CA3AF; }
+        .btn { border: none; color: white; padding: 8px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; }
+        .btn-ludo { background: linear-gradient(90deg, #3B82F6, #2563EB); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .btn-draw { background: linear-gradient(90deg, #EC4899, #DB2777); box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3); }
+        .btn-voice { background: linear-gradient(90deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
 
-    /* Canvas */
-    #drawCanvas { background: #ffffff; border-radius: 12px; width: 100%; height: 350px; touch-action: none; }
-    .color-picker { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
-    .c-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; }
-
-    /* Voice Room */
-    .mic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
-    .mic-slot { background: #1d1b3a; border-radius: 50%; width: 65px; height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 2px dashed #4c1d95; font-size: 20px; }
-    .mic-active { border: 2px solid #ec4899; background: #2e1065; }
-
-    /* Features UI */
-    .list-item { background: #1d1b3a; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-
-    /* Toggle Switch Style */
-    .switch-btn { background: #22c55e; color: white; border: none; padding: 6px 16px; border-radius: 15px; font-weight: bold; cursor: pointer; min-width: 60px; }
-
-    .bottom-nav { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px; background: #16162a; border-top: 1px solid #2a2a4a; }
-    .b-item { text-align: center; font-size: 12px; color: #6b7280; font-weight: bold; cursor: pointer; }
-    .b-active { color: #ec4899; }
-  </style>
+        /* Interactive Ludo Board Section (Built-in Game) */
+        #ludoContainer { display: none; background: #181828; border-radius: 16px; padding: 15px; border: 1px solid #3B82F6; margin-bottom: 20px; text-align: center; }
+        .ludo-board { width: 100%; max-width: 300px; height: 300px; margin: 0 auto; background: #FFF; border-radius: 12px; display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); gap: 1px; padding: 4px; border: 3px solid #333; }
+        .cell { background: #E5E7EB; border-radius: 2px; }
+        .cell.red { background: #EF4444; }
+        .cell.green { background: #10B981; }
+        .cell.yellow { background: #F59E0B; }
+        .cell.blue { background: #3B82F6; }
+        .dice-area { margin-top: 15px; display: flex; justify-content: space-around; align-items: center; }
+        .dice-btn { background: #F59E0B; color: #000; font-size: 18px; font-weight: 900; width: 60px; height: 60px; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); }
+    </style>
 </head>
 <body>
 
-<div class="app">
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="user-info" onclick="openModal('profileModal')">
-      <div class="avatar">KS</div>
-      <div>
-        <div style="font-weight: bold; font-size: 14px;">KS Rajput</div>
-        <div style="font-size: 10px; color: #8b5cf6;">ID: 67108876 ✏️</div>
-      </div>
+    <!-- Header -->
+    <div class="header">
+        <div class="user-profile">
+            <div class="avatar">KS</div>
+            <div class="user-info">
+                <h3>KS Rajput</h3>
+                <p>ID: 67108876</p>
+            </div>
+        </div>
+        <div class="vip-badge">VIP 9</div>
     </div>
-    <button class="coins-btn" onclick="openModal('topupModal')">🪙 <span id="coinCount">42,905</span> +</button>
-  </div>
 
-  <!-- Quick Nav -->
-  <div class="quick-nav">
-    <div class="nav-btn" onclick="openModal('rankingModal')"><div class="icon-box">🏆</div>Ranking</div>
-    <div class="nav-btn" onclick="openModal('tasksModal')"><div class="icon-box">📋</div>Tasks</div>
-    <div class="nav-btn" onclick="openModal('friendsModal')"><div class="icon-box">👥</div>Friends</div>
-    <div class="nav-btn" onclick="openModal('vipModal')"><div class="icon-box">👑</div>VIP</div>
-  </div>
+    <!-- Games List -->
+    <div class="section-title">🎮 Popular Party Games</div>
+    
+    <div class="card">
+        <div class="card-info">
+            <h4>Ludo Master 🎲</h4>
+            <p>4 Player Real-Time Match</p>
+        </div>
+        <button class="btn btn-ludo" onclick="startLudo()">Play Game</button>
+    </div>
 
-  <div class="content">
-    <div class="section-title">Popular Games 🎮</div>
+    <!-- Live Ludo Game Area -->
+    <div id="ludoContainer">
+        <h3 style="margin-bottom: 10px; color: #3B82F6;">🎲 Ludo Master Board</h3>
+        <div class="ludo-board" id="board"></div>
+        <div class="dice-area">
+            <div>Current Turn: <b id="turnText" style="color:#EF4444;">RED</b></div>
+            <button class="dice-btn" id="diceBtn" onclick="rollDice()">🎲</button>
+        </div>
+    </div>
 
     <div class="card">
-      <div>
-        <div class="g-title">Draw & Guess 🎨</div>
-        <div class="g-sub">Interactive Canvas Party Game</div>
-      </div>
-      <button class="btn-play" onclick="openGameScreen()">Play</button>
+        <div class="card-info">
+            <h4>Draw & Guess 🎨</h4>
+            <p>Interactive Canvas Party Game</p>
+        </div>
+        <button class="btn btn-draw">Play</button>
     </div>
+
+    <!-- Voice Rooms -->
+    <div class="section-title">🎙️ Active Voice Party</div>
 
     <div class="card">
-      <div>
-        <div class="g-title">Space Werewolf 🐺</div>
-        <div class="g-sub">Find the Impostor</div>
-      </div>
-      <button class="btn-play" onclick="alert('Werewolf room joining...')">Play</button>
+        <div class="card-info">
+            <h4>Hindi Chill Room 🎵</h4>
+            <p>8 Seats Mic Voice Chat</p>
+        </div>
+        <button class="btn btn-voice">Join Room</button>
     </div>
 
-    <div class="section-title">Active Voice Party 🎙️</div>
-    <div class="card" style="border: 1px solid #ec4899;">
-      <div>
-        <div class="g-title">Hindi Chill & Songs 🎵</div>
-        <div class="g-sub">🎙️ 5 Seats Occupied</div>
-      </div>
-      <button class="btn-play" style="background: #ec4899;" onclick="openModal('voiceRoomModal')">Join Room</button>
-    </div>
-  </div>
+    <script>
+        // Draw Mini Ludo Grid Engine
+        const board = document.getElementById('board');
+        for (let i = 0; i < 225; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            let row = Math.floor(i / 15);
+            let col = i % 15;
 
-  <!-- Profile Modal -->
-  <div class="modal-screen" id="profileModal">
-    <div class="modal-header">
-      <h3>👤 User Profile</h3>
-      <button class="close-btn" onclick="closeModal('profileModal')">Close</button>
-    </div>
-    <div style="text-align: center; margin-bottom: 20px;">
-      <div class="avatar" style="width:70px; height:70px; margin: 0 auto; font-size: 24px;">KS</div>
-      <h2 style="margin-top: 10px;">KS Rajput</h2>
-      <p style="color: #8b5cf6; font-size: 13px;">ID: 67108876</p>
-    </div>
-    <div class="list-item"><span>Level</span> <strong>Lv. 15 🔥</strong></div>
-    <div class="list-item"><span>Coins Balance</span> <strong style="color:#f59e0b;">🪙 42,905</strong></div>
-    <div class="list-item">
-      <span>Privacy: Hide Location</span> 
-      <button class="switch-btn" id="privacyBtn" onclick="togglePrivacy()">ON</button>
-    </div>
-  </div>
+            // Simple Color Box Logic for Ludo Home Corners
+            if (row < 6 && col < 6) cell.classList.add('red');
+            else if (row < 6 && col > 8) cell.classList.add('green');
+            else if (row > 8 && col < 6) cell.classList.add('blue');
+            else if (row > 8 && col > 8) cell.classList.add('yellow');
+            
+            board.appendChild(cell);
+        }
 
-  <!-- TopUp Modal -->
-  <div class="modal-screen" id="topupModal">
-    <div class="modal-header">
-      <h3>🪙 Coin Store (Top-Up)</h3>
-      <button class="close-btn" onclick="closeModal('topupModal')">Close</button>
-    </div>
-    <div class="list-item"><span>🪙 1,000 Coins</span> <button class="btn-play" onclick="addCoins(1000)">₹10</button></div>
-    <div class="list-item"><span>🪙 5,500 Coins</span> <button class="btn-play" onclick="addCoins(5500)">₹50</button></div>
-    <div class="list-item"><span>🪙 12,000 Coins</span> <button class="btn-play" onclick="addCoins(12000)">₹100</button></div>
-  </div>
+        function startLudo() {
+            const container = document.getElementById('ludoContainer');
+            container.style.display = container.style.display === 'block' ? 'none' : 'block';
+        }
 
-  <!-- Ranking Modal -->
-  <div class="modal-screen" id="rankingModal">
-    <div class="modal-header">
-      <h3>🏆 Global Leaderboard</h3>
-      <button class="close-btn" onclick="closeModal('rankingModal')">Close</button>
-    </div>
-    <div class="list-item"><span>1. 🥇 Gamer_King</span> <strong>98,000 pts</strong></div>
-    <div class="list-item"><span>2. 🥈 KS Rajput</span> <strong>42,905 pts</strong></div>
-    <div class="list-item"><span>3. 🥉 Shadow_Player</span> <strong>35,400 pts</strong></div>
-  </div>
-
-  <!-- Tasks Modal -->
-  <div class="modal-screen" id="tasksModal">
-    <div class="modal-header">
-      <h3>📋 Daily Tasks</h3>
-      <button class="close-btn" onclick="closeModal('tasksModal')">Close</button>
-    </div>
-    <div class="list-item"><span>Daily Check-in</span> <button class="btn-play" onclick="addCoins(500)">Claim 500 🪙</button></div>
-    <div class="list-item"><span>Play 1 Game</span> <button class="btn-play" onclick="addCoins(300)">Claim 300 🪙</button></div>
-  </div>
-
-  <!-- Friends Modal -->
-  <div class="modal-screen" id="friendsModal">
-    <div class="modal-header">
-      <h3>👥 Friends List</h3>
-      <button class="close-btn" onclick="closeModal('friendsModal')">Close</button>
-    </div>
-    <div class="list-item">
-      <span>🟢 Rohit (Online)</span> 
-      <button class="btn-play" style="padding: 4px 12px; font-size: 12px;" onclick="openChat('Rohit')">Chat</button>
-    </div>
-    <div class="list-item">
-      <span>🔴 Alex (Offline)</span> 
-      <button style="padding: 4px 12px; font-size: 12px; background: #374151; color: white; border: none; border-radius: 12px;" onclick="openFriendProfile('Alex')">Profile</button>
-    </div>
-  </div>
-
-  <!-- Chat Screen Modal -->
-  <div class="modal-screen" id="chatModal">
-    <div class="modal-header">
-      <h3 id="chatTitle">💬 Chat</h3>
-      <button class="close-btn" onclick="closeModal('chatModal')">Close</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="msg msg-in">Hey KS! Kaise ho?</div>
-      <div class="msg msg-in">Aaj Ludo khele? 🎲</div>
-    </div>
-    <div class="chat-input-box">
-      <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
-      <button class="btn-play" onclick="sendMessage()">Send</button>
-    </div>
-  </div>
-
-  <!-- Friend Profile Modal -->
-  <div class="modal-screen" id="friendProfileModal">
-    <div class="modal-header">
-      <h3>👤 Friend Profile</h3>
-      <button class="close-btn" onclick="closeModal('friendProfileModal')">Close</button>
-    </div>
-    <div style="text-align: center; margin-bottom: 20px;">
-      <div class="avatar" style="width:70px; height:70px; margin: 0 auto; font-size: 24px; background: #ef4444;">A</div>
-      <h2 style="margin-top: 10px;" id="fName">Alex</h2>
-      <p style="color: #9ca3af; font-size: 13px;">ID: 88492011</p>
-    </div>
-    <div class="list-item"><span>Status</span> <strong>Offline 🔴</strong></div>
-    <div class="list-item"><span>Level</span> <strong>Lv. 10 ⚡</strong></div>
-  </div>
-
-  <!-- VIP Modal -->
-  <div class="modal-screen" id="vipModal">
-    <div class="modal-header">
-      <h3>👑 VIP Center</h3>
-      <button class="close-btn" onclick="closeModal('vipModal')">Close</button>
-    </div>
-    <div style="text-align:center; padding: 20px 0;">
-      <h2 style="color: #f59e0b;">VIP Privilege Pass</h2>
-      <p style="margin-top: 10px; color:#9ca3af;">Get Golden Name, Exclusive Avatar Frame & 2x Rewards!</p>
-      <button class="btn-play" style="margin-top: 20px;" onclick="alert('VIP Pass Activated!')">Activate VIP</button>
-    </div>
-  </div>
-
-  <!-- Game Canvas Screen -->
-  <div class="modal-screen" id="gameScreen">
-    <div class="modal-header">
-      <h3>🎨 Draw & Guess (Word: APPLE)</h3>
-      <button class="close-btn" onclick="closeModal('gameScreen')">Exit</button>
-    </div>
-    <canvas id="drawCanvas"></canvas>
-    <div class="color-picker">
-      <div class="c-btn" style="background: #000;" onclick="changeColor('#000')"></div>
-      <div class="c-btn" style="background: #ef4444;" onclick="changeColor('#ef4444')"></div>
-      <div class="c-btn" style="background: #3b82f6;" onclick="changeColor('#3b82f6')"></div>
-      <div class="c-btn" style="background: #22c55e;" onclick="changeColor('#22c55e')"></div>
-      <button style="background: #374151; color: white; border: none; padding: 0 15px; border-radius: 15px; font-weight: bold;" onclick="clearCanvas()">Clear</button>
-    </div>
-  </div>
-
-  <!-- Voice Room Screen -->
-  <div class="modal-screen" id="voiceRoomModal">
-    <div class="modal-header">
-      <h3>🎵 Hindi Chill Party</h3>
-      <button class="close-btn" onclick="closeModal('voiceRoomModal')">Leave</button>
-    </div>
-    <div class="mic-grid">
-      <div class="mic-slot mic-active">👑<span style="font-size: 10px;">Host</span></div>
-      <div class="mic-slot mic-active">🎙️<span style="font-size: 10px;">KS</span></div>
-      <div class="mic-slot">➕</div>
-      <div class="mic-slot">➕</div>
-      <div class="mic-slot">➕</div>
-      <div class="mic-slot">➕</div>
-      <div class="mic-slot">➕</div>
-      <div class="mic-slot">➕</div>
-    </div>
-    <div style="margin-top: auto; text-align: center;">
-      <button id="micBtn" style="background: #22c55e; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; font-size: 16px;" onclick="toggleMic()">🎙️ Mic On</button>
-    </div>
-  </div>
-
-  <!-- Bottom Nav -->
-  <div class="bottom-nav">
-    <div class="b-item b-active">🎮 Games</div>
-    <div class="b-item" onclick="openModal('voiceRoomModal')">🎙️ Party</div>
-    <div class="b-item" onclick="openModal('friendsModal')">💬 Chat</div>
-    <div class="b-item" onclick="openModal('profileModal')">👤 Profile</div>
-  </div>
-</div>
-
-<script>
-  let coins = 42905;
-  let isMicOn = true;
-  let isPrivacyOn = true;
-  let canvas, ctx, drawing = false, color = "#000000";
-
-  function openModal(id) {
-    document.getElementById(id).style.display = 'flex';
-  }
-
-  function closeModal(id) {
-    document.getElementById(id).style.display = 'none';
-  }
-
-  function addCoins(amount) {
-    coins += amount;
-    document.getElementById('coinCount').innerText = coins.toLocaleString();
-    alert('🎉 ' + amount + ' Coins Added Successfully!');
-  }
-
-  /* Privacy Toggle */
-  function togglePrivacy() {
-    isPrivacyOn = !isPrivacyOn;
-    const btn = document.getElementById('privacyBtn');
-    if(isPrivacyOn) {
-      btn.style.background = '#22c55e';
-      btn.innerText = 'ON';
-    } else {
-      btn.style.background = '#ef4444';
-      btn.innerText = 'OFF';
-    }
-  }
-
-  /* Chat Functions */
-  function openChat(name) {
-    closeModal('friendsModal');
-    document.getElementById('chatTitle').innerText = '💬 Chat with ' + name;
-    openModal('chatModal');
-  }
-
-  function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const msg = input.value.trim();
-    if(msg !== "") {
-      const chatBox = document.getElementById('chatMessages');
-      chatBox.innerHTML += `<div class="msg msg-out">${msg}</div>`;
-      input.value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-      
-      setTimeout(() => {
-        chatBox.innerHTML += `<div class="msg msg-in">Haan bhai! EnjoyPlay app mast chal rahi hai! 🔥</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 1000);
-    }
-  }
-
-  function openFriendProfile(name) {
-    closeModal('friendsModal');
-    document.getElementById('fName').innerText = name;
-    openModal('friendProfileModal');
-  }
-
-  function toggleMic() {
-    isMicOn = !isMicOn;
-    const btn = document.getElementById('micBtn');
-    btn.style.background = isMicOn ? '#22c55e' : '#ef4444';
-    btn.innerText = isMicOn ? '🎙️ Mic On' : '🎙️ Mic Muted';
-  }
-
-  function openGameScreen() {
-    openModal('gameScreen');
-    setTimeout(initCanvas, 100);
-  }
-
-  function initCanvas() {
-    canvas = document.getElementById('drawCanvas');
-    ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    canvas.addEventListener('touchstart', startDraw);
-    canvas.addEventListener('touchend', stopDraw);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mouseup', stopDraw);
-    canvas.addEventListener('mousemove', draw);
-  }
-
-  function startDraw(e) { drawing = true; draw(e); }
-  function stopDraw() { drawing = false; ctx.beginPath(); }
-  function changeColor(c) { color = c; }
-  function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-
-  function draw(e) {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-
-    ctx.lineWidth = 4;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = color;
-
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  }
-</script>
-
+        function rollDice() {
+            const diceBtn = document.getElementById('diceBtn');
+            const num = Math.floor(Math.random() * 6) + 1;
+            diceBtn.innerText = num;
+        }
+    </script>
 </body>
 </html>
