@@ -1,115 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WePlay Clone - KS Rajput</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #e8e3fc; display: flex; justify-content: center; min-height: 100vh; }
-    .app { width: 100%; max-width: 420px; background: #f5f3ff; min-height: 100vh; display: flex; flex-direction: column; }
-    .top { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
-    .user { display: flex; align-items: center; gap: 10px; font-weight: bold; }
-    .avatar { width: 36px; height: 36px; background: #8b5cf6; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .coins { color: #d97706; background: #fef3c7; padding: 4px 10px; border-radius: 15px; font-weight: bold; font-size: 14px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #12121e; color: #fff; display: flex; justify-content: center; min-height: 100vh; }
+    .app { width: 100%; max-width: 420px; background: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
     
-    .nav-top { display: flex; justify-content: space-around; padding: 15px; background: #fff; border-bottom: 1px solid #eee; }
-    .q-btn { text-align: center; font-size: 12px; font-weight: bold; color: #4b5563; }
-    .q-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-size: 20px; }
+    /* Top Header */
+    .top-bar { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #16162a; border-bottom: 1px solid #2a2a4a; }
+    .user-info { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 40px; height: 40px; background: linear-gradient(45deg, #8b5cf6, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #fff; }
+    .coins-btn { background: #2a2a4a; border: 1px solid #f59e0b; color: #f59e0b; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; cursor: pointer; }
     
-    .content { flex: 1; padding: 15px; overflow-y: auto; }
-    .section-title { font-size: 16px; font-weight: bold; margin: 15px 0 10px; color: #1f2937; }
+    /* Quick Nav */
+    .quick-nav { display: flex; justify-content: space-around; padding: 15px; background: #16162a; margin-bottom: 10px; }
+    .nav-btn { text-align: center; font-size: 12px; color: #a5b4fc; cursor: pointer; }
+    .icon-box { width: 45px; height: 45px; background: #252542; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 22px; }
     
-    .card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .g-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-    .g-orange { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
-    .g-purple { background: linear-gradient(135deg, #a855f7, #9333ea); color: white; }
-    .g-green { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
-    .g-pink { background: linear-gradient(135deg, #ec4899, #db2777); color: white; }
+    /* Content Area */
+    .content { flex: 1; padding: 15px; overflow-y: auto; padding-bottom: 70px; }
+    .section-title { font-size: 16px; font-weight: bold; margin: 15px 0 10px; color: #e0e7ff; display: flex; align-items: center; justify-content: space-between; }
     
-    .btn-play { background: white; color: #333; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; }
-    .btn-pink { background: #ec4899; color: white; }
+    /* Game Cards */
+    .card { background: #22223b; border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #32325a; }
+    .g-title { font-size: 16px; font-weight: bold; }
+    .g-sub { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+    .btn-play { background: linear-gradient(45deg, #ec4899, #8b5cf6); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
     
-    .nav-bottom { display: flex; justify-content: space-around; padding: 12px; background: #fff; border-top: 1px solid #eee; }
-    .nav-item { text-align: center; font-size: 12px; color: #6b7280; font-weight: bold; }
-    .nav-active { color: #ec4899; }
+    /* Voice Room Screen (Modal) */
+    .voice-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0f0c20; z-index: 100; flex-direction: column; padding: 20px; }
+    .room-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .mic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+    .mic-slot { background: #1d1b3a; border-radius: 50%; width: 65px; height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 2px dashed #4c1d95; font-size: 20px; }
+    .mic-active { border: 2px solid #ec4899; background: #2e1065; }
+    
+    /* Bottom Navigation */
+    .bottom-nav { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px; background: #16162a; border-top: 1px solid #2a2a4a; }
+    .b-item { text-align: center; font-size: 12px; color: #6b7280; font-weight: bold; cursor: pointer; }
+    .b-active { color: #ec4899; }
   </style>
 </head>
 <body>
 
 <div class="app">
-  <div class="top">
-    <div class="user">
-      <div class="avatar">K</div>
-      <span>KS Rajput</span>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="user-info">
+      <div class="avatar">KS</div>
+      <div>
+        <div style="font-weight: bold; font-size: 14px;">KS Rajput</div>
+        <div style="font-size: 10px; color: #8b5cf6;">ID: 67108876</div>
+      </div>
     </div>
-    <div class="coins">🪙 27,905 +</div>
+    <button class="coins-btn" onclick="addCoins()">🪙 <span id="coinCount">27,905</span> +</button>
   </div>
 
-  <div class="nav-top">
-    <div class="q-btn"><div class="q-icon" style="background:#fef3c7;">🏆</div>Ranking</div>
-    <div class="q-btn"><div class="q-icon" style="background:#e0f2fe;">📋</div>Tasks</div>
-    <div class="q-btn"><div class="q-icon" style="background:#dcfce7;">👥</div>Friends</div>
-    <div class="q-btn"><div class="q-icon" style="background:#fef3c7;">⭐</div>Club</div>
+  <!-- Quick Nav -->
+  <div class="quick-nav">
+    <div class="nav-btn"><div class="icon-box">🏆</div>Ranking</div>
+    <div class="nav-btn"><div class="icon-box">📋</div>Tasks</div>
+    <div class="nav-btn"><div class="icon-box">👥</div>Friends</div>
+    <div class="nav-btn"><div class="icon-box">👑</div>VIP</div>
   </div>
 
+  <!-- Content -->
   <div class="content">
-    <div class="section-title">Games 🎮</div>
+    <div class="section-title">Popular Games 🎮</div>
 
-    <div class="card g-blue">
+    <div class="card">
       <div>
-        <h3>Who's the Spy 🕵️‍♂️</h3>
-        <p style="font-size:12px; opacity:0.8;">Super popular casual games</p>
+        <div class="g-title">Who's the Spy 🕵️‍♂️</div>
+        <div class="g-sub">Voice & Word Party Game</div>
       </div>
-      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
+      <button class="btn-play" onclick="openGame('Who\'s the Spy')">Play</button>
     </div>
 
-    <div class="card g-orange">
+    <div class="card">
       <div>
-        <h3>Trickster's Cafe 🐊</h3>
-        <p style="font-size:12px; opacity:0.8;">Psychological vs Qismat</p>
+        <div class="g-title">Ludo Master 🎲</div>
+        <div class="g-sub">4 Player Real-Time Match</div>
       </div>
-      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
+      <button class="btn-play" onclick="openGame('Ludo Master')">Play</button>
     </div>
 
-    <div class="card g-purple">
+    <div class="card">
       <div>
-        <h3>Space Werewolf 🐺</h3>
-        <p style="font-size:12px; opacity:0.8;">Killers VS Civilians</p>
+        <div class="g-title">Space Werewolf 🐺</div>
+        <div class="g-sub">Find the Impostor</div>
       </div>
-      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
+      <button class="btn-play" onclick="openGame('Space Werewolf')">Play</button>
     </div>
 
-    <div class="card g-green">
+    <div class="section-title">Active Voice Party 🎙️</div>
+    <div class="card" style="border: 1px solid #ec4899;">
       <div>
-        <h3>Draw & Guess 🎨</h3>
-        <p style="font-size:12px; opacity:0.8;">Imagination battle</p>
+        <div class="g-title">Hindi Chill & Songs 🎵</div>
+        <div class="g-sub">🎙️ 5 Seats Occupied</div>
       </div>
-      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
-    </div>
-
-    <div class="card g-pink">
-      <div>
-        <h3>Mic Grab 🎤</h3>
-        <p style="font-size:12px; opacity:0.8;">Hot songs non-stop</p>
-      </div>
-      <a href="https://poki.com" target="_blank"><button class="btn-play">Play</button></a>
-    </div>
-
-    <div class="section-title">🎙️ Active Voice Rooms</div>
-    <div class="card" style="border: 2px solid #f472b6;">
-      <div>
-        <h3>Hindi Songs & Chill 🎵</h3>
-        <p style="font-size:12px; color:#6b7280;">🎙️ 5/8 On Mic</p>
-      </div>
-      <button class="btn-play btn-pink" onclick="alert('Connecting to Voice Room...')">Join Mic</button>
+      <button class="btn-play" style="background: #ec4899;" onclick="toggleVoiceRoom(true)">Join Room</button>
     </div>
   </div>
 
-  <div class="nav-bottom">
-    <div class="nav-item nav-active">🎮 Games</div>
-    <div class="nav-item">🎙️ Party</div>
-    <div class="nav-item">👤 Profile</div>
+  <!-- Voice Room Screen Modal -->
+  <div class="voice-screen" id="voiceRoom">
+    <div class="room-header">
+      <h3>🎵 Hindi Chill Party</h3>
+      <button style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 12px; font-weight: bold;" onclick="toggleVoiceRoom(false)">Leave</button>
+    </div>
+    
+    <div style="text-align: center; color: #a5b4fc; margin-bottom: 20px;">8-Mic Voice Room</div>
+
+    <div class="mic-grid">
+      <div class="mic-slot mic-active">👑<span style="font-size: 10px;">Host</span></div>
+      <div class="mic-slot mic-active">🎙️<span style="font-size: 10px;">KS</span></div>
+      <div class="mic-slot">➕</div>
+      <div class="mic-slot">➕</div>
+      <div class="mic-slot">➕</div>
+      <div class="mic-slot">➕</div>
+      <div class="mic-slot">➕</div>
+      <div class="mic-slot">➕</div>
+    </div>
+
+    <div style="margin-top: auto; text-align: center;">
+      <button id="micBtn" style="background: #22c55e; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; font-size: 16px;" onclick="toggleMic()">🎙️ Mic On</button>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="b-item b-active">🎮 Games</div>
+    <div class="b-item">🎙️ Party</div>
+    <div class="b-item">💬 Chat</div>
+    <div class="b-item">👤 Profile</div>
   </div>
 </div>
+
+<script>
+  let coins = 27905;
+  let isMicOn = true;
+
+  function addCoins() {
+    coins += 1000;
+    document.getElementById('coinCount').innerText = coins.toLocaleString();
+    alert('🎉 1,000 Free Coins Added!');
+  }
+
+  function openGame(gameName) {
+    alert('🎮 Launching ' + gameName + ' Game Server...');
+  }
+
+  function toggleVoiceRoom(show) {
+    document.getElementById('voiceRoom').style.display = show ? 'flex' : 'none';
+  }
+
+  function toggleMic() {
+    isMicOn = !isMicOn;
+    const btn = document.getElementById('micBtn');
+    if(isMicOn) {
+      btn.style.background = '#22c55e';
+      btn.innerText = '🎙️ Mic On';
+    } else {
+      btn.style.background = '#ef4444';
+      btn.innerText = '🎙️ Mic Muted';
+    }
+  }
+</script>
 
 </body>
 </html>
